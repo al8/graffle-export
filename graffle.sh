@@ -1,4 +1,11 @@
 #!/bin/bash
+# set -e -u -o pipefail  # https://our.intern.facebook.com/intern/wiki/Web_Foundation/Prod_Practices/
+
+####################################################################################################
+# Constants
+####################################################################################################
+readonly SCRIPT_NAME=`basename "$0"`
+readonly SCRIPT_DIRECTORY="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 if [ $# -eq 2 ]; then
     FORMAT=""
@@ -9,7 +16,7 @@ elif [ $# -eq 3 ]; then
     INPUT_FILE=$2
     OUTPUT_FILE=$3
 else
-    PROG=`basename $0`
+    PROG=$SCRIPT_NAME
     echo "Usage: $PROG [<format>] <graffle file> <outputfile>"
     exit 1
 fi
@@ -72,10 +79,8 @@ else
     OUTPUT_PATH=$PWD/$OUTPUT_FILE
 fi
 
-DIR=`dirname $0`
-
 #echo Format = $FORMAT
 #echo Input = $INPUT_PATH
 #echo Output = $OUTPUT_PATH
 
-osascript $DIR/graffle.scpt "${GRAFFLE_APP}" "$FORMAT" "$INPUT_PATH" "$OUTPUT_PATH"
+osascript "$SCRIPT_DIRECTORY/graffle.scpt" "${GRAFFLE_APP}" "$FORMAT" "$INPUT_PATH" "$OUTPUT_PATH"
